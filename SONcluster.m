@@ -8,6 +8,7 @@ function [U,Vpath,Lpath] = SONcluster(X,lambdas,varargin)
 %   values. Valid parameters and their default values are:
 %      'tol' - Tolerance on relative change in the cluster centers {1e-8}
 %      'maxiters' - Maximum number of iterations {1000}
+%      'gamma' - parameter that controls the local kernel weights {2}
 %      'rho' - ADMM step size {10}
 %      'printitn' - Print every n iterations; 0 for no printing {0}
 %
@@ -19,6 +20,7 @@ function [U,Vpath,Lpath] = SONcluster(X,lambdas,varargin)
 params = inputParser;
 params.addParamValue('tol',1e-8,@isscalar);
 params.addParamValue('maxiters',1e3,@(x) isscalar(x) & x > 0);
+params.addParamValue('gamma',2,@isscalar);
 params.addParamValue('rho',10,@isscalar);
 params.addParamValue('printitn',0,@isscalar);
 params.parse(varargin{:});
@@ -27,6 +29,7 @@ params.parse(varargin{:});
 %% Copy from params object.
 tol = params.Results.tol;
 maxiters = params.Results.maxiters;
+gamma = params.Results.gamma;
 rho = params.Results.rho;
 printItn = params.Results.printitn;
 
@@ -42,7 +45,6 @@ Lpath = cell(nLambda,1);
 Q = zeros(q,N);
 W = zeros(q,1);
 key = zeros(q,2);
-gamma = 0;
 
 i=1;
 for t=1:N
@@ -72,19 +74,8 @@ for ilambda=1:nLambda
             break;
         end
         UQ = u*Q';
-%% Update V
-%         Z = (rho/lambda)*UQ + (1/lambda)*L;
-%         nz = norms(Z,2,1);
-%         z = (nz - 1)./nz;
-%         z(z < 0) = 0;
-%         V = (lambda/rho)*bsxfun(@times,Z,z);
-        
-         Z = UQ + (1/rho)*L;
-%         nz = norms(Z,2,1)';
-%         z = 1 - (lambda/rho)*W./nz;
-%         z(z < 0) = 0;
-%         V = bsxfun(@times,Z,z');
-
+%% Update V        
+        Z = UQ + (1/rho)*L;
 %        V = prox_L1(Z,lambda/rho*W');
         V = prox_L2(Z,lambda/rho*W');
 
