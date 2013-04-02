@@ -8,6 +8,7 @@ function [U,Vpath,Lpath] = SONcluster(X,lambdas,varargin)
 %   values. Valid parameters and their default values are:
 %      'tol' - Tolerance on relative change in the cluster centers {1e-8}
 %      'maxiters' - Maximum number of iterations {1000}
+%      'p' - which norm to use {2}
 %      'gamma' - parameter that controls the local kernel weights {2}
 %      'rho' - ADMM step size {10}
 %      'printitn' - Print every n iterations; 0 for no printing {0}
@@ -20,16 +21,17 @@ function [U,Vpath,Lpath] = SONcluster(X,lambdas,varargin)
 params = inputParser;
 params.addParamValue('tol',1e-8,@isscalar);
 params.addParamValue('maxiters',1e3,@(x) isscalar(x) & x > 0);
+params.addParamValue('norm',2,@(x) x==1 | x==2 | x==Inf);
 params.addParamValue('gamma',2,@isscalar);
 params.addParamValue('rho',10,@isscalar);
 params.addParamValue('printitn',0,@isscalar);
 params.parse(varargin{:});
 
-
-%% Copy from params object.
+%% Copy from params object
 tol = params.Results.tol;
 maxiters = params.Results.maxiters;
 gamma = params.Results.gamma;
+pnorm = params.Results.norm;
 rho = params.Results.rho;
 printItn = params.Results.printitn;
 
@@ -43,7 +45,7 @@ Lpath = cell(nLambda,1);
 
 %% Initialize variables
 Q = zeros(q,N);
-W = zeros(q,1);
+W = ones(q,1);
 key = zeros(q,2);
 
 i=1;
@@ -57,6 +59,14 @@ for t=1:N
     end
 end
 
+if pnorm==1
+    prox = @(z,tau) prox_L1(z,tau);
+elseif pnorm==2
+    prox = @(z,tau) prox_L2(z,tau);
+elseif pnorm==Inf
+    prox = @(z,tau) prox_Linf(z,tau);
+end
+    
 V = zeros(d,q);
 L = zeros(d,q);
 
@@ -76,14 +86,13 @@ for ilambda=1:nLambda
         UQ = u*Q';
 %% Update V        
         Z = UQ + (1/rho)*L;
-%        V = prox_L1(Z,lambda/rho*W');
-        V = prox_L2(Z,lambda/rho*W');
+        V = prox(Z,(lambda/rho)*W');
 
 %% Update L
         L = L + rho*(UQ-V);
         if (mod(iter,printItn)==0)
             fprintf(' Iter %4d: Objective = %.6e\n', ...
-            iter, 0.5*norm(X-u)^2 + lambda*sum(norms(UQ,2,1)));
+            iter, 0.5*norm(X-u)^2 + lambda*sum(norms(UQ,pnorm,2)));
         end        
     end
     U{ilambda} = u;

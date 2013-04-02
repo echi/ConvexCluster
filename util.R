@@ -4,6 +4,13 @@
 # q - dimension of points
 # k - index of kth pair. There are 1:q*(q-1)/2 pairs.
 
+library(doMC)
+library(foreach)
+library(compiler)
+registerDoMC()
+
+source('proximal_mappings.R')
+
 temp = function(X,mu) {
   p = ncol(X)
   k = 1
@@ -46,14 +53,12 @@ temp = function(k,p) {
 }
 vec2tri = cmpfun(temp)
 
-
 idx = vec2tri(k,p)
 M = matrix(0,p,p)
 
 for (kk in 1:nrow(idx)) {
   M[idx[kk,1],idx[kk,2]] = kk
 }
-
 
 ## Update U
 
@@ -167,7 +172,6 @@ temp = function(Lambda,U,V,nu) {
 }
 update_Lambda = cmpfun(temp)
 
-
 temp = function(X,U,gamma1,gamma,w) {
   p = ncol(X)
   nK = p*(p-1)/2
@@ -213,25 +217,31 @@ temp = function(X,Lambda) {
 }
 loss_dual = cmpfun(temp)
 
-temp = function(X,Lambda,gamma,gamma1=0,max_iter=1e3,tol=1e-4) {
+temp = function(X,Lambda,w,nu,gamma,gamma1=0,max_iter=1e3,tol=1e-4) {
   obj_p = double(max_iter)
   obj_d = double(max_iter)
   duality_gap = double(max_iter)
   alpha_old = 1
   Lambda_old = Lambda
+  p = ncol(X)
+  nK = ncol(Lambda)
+  ix = vec2tri(1:nK,p)
   for (iter in 1:max_iter) {
-    U = update_U(X,Lambda,gamma1)
-    V = update_V(U,Lambda,w,gamma,nu)
-    Lambda = update_Lambda(Lambda,U,V,nu)
+#    U = update_U(X,Lambda,gamma1)
+    U = update_UF(X,Lambda)
+    V = update_VF(U,Lambda,w,gamma,nu,ix)
+#    V = update_V(U,Lambda,w,gamma,nu)    
+    Lambda = update_LambdaF(Lambda,U,V,nu,ix)
+#    Lambda = update_Lambda(Lambda,U,V,nu)    
     alpha = 0.5*(1 + sqrt(1 + 4*alpha_old^2))
     Lambda = Lambda + ((alpha_old-1)/alpha)*(Lambda-Lambda_old)
 
-    obj_p[iter] = loss_primal(X,U,gamma1,gamma,w)
-    obj_d[iter] = loss_dual(X,Lambda)
+    obj_p[iter] = loss_primalF(X,U,gamma1,gamma,w,ix)
+    obj_d[iter] = loss_dualF(X,Lambda)
     duality_gap[iter] = obj_p[iter] - obj_d[iter]
-  if (abs(duality_gap[iter]) < tol) {
-    break
-  }
+    if (abs(duality_gap[iter]) < tol) {
+      break
+    }
 #    if (norm(Lambda-Lambda_old)/(norm(Lambda_old)+1) < tol) {
 #      break
 #    }
@@ -244,7 +254,8 @@ temp = function(X,Lambda,gamma,gamma1=0,max_iter=1e3,tol=1e-4) {
 }
 convex_cluster = cmpfun(temp)
 
-temp = function(X, Lambda, gamma_max) {
-  
-}
-convex_cluster_path = cmpfun(temp)
+rm(list="temp")
+
+#temp = function(X, Lambda, gamma_max) {
+#}
+#convex_cluster_path = cmpfun(temp)

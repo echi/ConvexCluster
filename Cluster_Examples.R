@@ -41,6 +41,7 @@ q + theme_bw() + theme(legend.position = "none")
 ggsave(filename="../Manuscript/kmeans.pdf",width=8,height=8)
 
 ## Perform convex clustering
+X = t(X)
 q = nrow(X)
 p = ncol(X)
 nK = p*(p-1)/2
@@ -51,7 +52,7 @@ nu = (2/nK)*0.99
 
 Lambda = matrix(0,q,nK)
 
-sol = convex_cluster(X,Lambda,gamma)
+system.time({sol = convex_cluster(X,Lambda,w,nu,gamma,tol=1e-5,max_iter=1e4)})
 
 ## Visualize the loss
 library(reshape2)

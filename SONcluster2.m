@@ -31,7 +31,7 @@ figure;
 
 %%
 lambda_start = 0;
-lambda_end = max(norms(x*Q',2,1))/N;
+lambda_end = max(norms(x*Q',Inf,1))/N;
 lambdas = lambda_start:0.00125:lambda_end;
 nLambda = numel(lambdas);
 loss = zeros(nLambda,1);
@@ -45,7 +45,7 @@ for j = 2:nLambda
     cvx_begin
     variable mu1(d,N)
     minimize(0.5*sum(sum((x-mu1).*(x-mu1))) ...
-         +lambda*sum(norms(Q*mu1',2,2)))
+         +lambda*sum(norms(Q*mu1',1,2)))
     cvx_end
     plot(mu1(1,:),mu1(2,:),'r.');
     title(sprintf('lambda = %g',lambda));

@@ -23,6 +23,7 @@ for t=1:N
 end
 %%
 C = cell(N,nLambda);
+cluster_sizes = cell(nLambda,1);
 for i=1:nLambda
     ix = find(norms(V{i},2,1) == 0);
     A = sparse([key(ix,1);key(ix,2)],[key(ix,2);key(ix,1)],ones(2*numel(ix),1),N,N);
@@ -37,9 +38,10 @@ for i=1:nLambda
         end
     end
 end
-
-cluster_sizes = cellfun(@numel,C);
-cluster_sizes = cluster_sizes(cluster_sizes > 0);
+clszs = cellfun('size',C,1);
+for i=1:nLambda
+    cluster_sizes{i} = clszs(clszs(:,i) > 0,i);
+end
 
 %% Compute cluster centroids
 centroids = cell(N,nLambda);
