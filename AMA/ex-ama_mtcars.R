@@ -2,7 +2,7 @@
 ## on senate data
 
 rm(list=ls())
-setwd("/Users/ericchi/Dropbox/Work/Research/00_Active/SONCluster/Code/AMA")
+setwd("/Users/ericchi/Dropbox/Work/Research/01_Submitted/SONCluster/Code/AMA")
 library(testthat)
 library(ggplot2)
 source('ama_loss.R')

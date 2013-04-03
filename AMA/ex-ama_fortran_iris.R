@@ -1,6 +1,6 @@
 ## Iris Data for Fortran only implementation
 rm(list=ls())
-setwd("/Users/ericchi/Dropbox/Work/Research/00_Active/SONCluster/Code/AMA")
+setwd("/Users/ericchi/Dropbox/Work/Research/01_Submitted/SONCluster/Code/AMA")
 source('ama_loss.R')
 source('ama_updates.R')
 source('ama_convex_cluster.R')

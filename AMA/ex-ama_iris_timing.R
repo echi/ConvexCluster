@@ -2,7 +2,7 @@
 ## on iris data
 
 rm(list=ls())
-setwd("/Users/ericchi/Dropbox/Work/Research/00_Active/SONCluster/Code/AMA")
+setwd("/Users/ericchi/Dropbox/Work/Research/01_Submitted/SONCluster/Code/AMA")
 library(testthat)
 library(ggplot2)
 source('ama_loss.R')
@@ -39,7 +39,7 @@ for (i in 1:nRuns) {
 gamma_seq_l2 = unique(path_l2$lambda)
 
 for (i in 1:nRuns) {
-  times_hok_l1[i] = system.time({path_l1 <- clusterpath.l1.general(t(X),gamma=kgamma)})[3]
+  times_hok_l1[i] = system.time({path_l1 <- clusterpath.l1.general(t(X),verbose=1,gamma=kgamma)})[3]
   print(paste0("Hocking L1: Completed ",i))
 }
 gamma_seq_l1 = unique(path_l1$lambda)

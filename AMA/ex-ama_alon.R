@@ -2,7 +2,7 @@
 ## on alon data
 
 rm(list=ls())
-setwd("/Users/ericchi/Dropbox/Work/Research/00_Active/SONCluster/Code/AMA")
+setwd("/Users/ericchi/Dropbox/Work/Research/01_Submitted/SONCluster/Code/AMA")
 library(testthat)
 library(ggplot2)
 source('ama_loss.R')
@@ -11,7 +11,7 @@ source('ama_convex_cluster.R')
 source('cluster_path_preprocess.R')
 library(clusterpath)
 
-alon_path = "/Users/ericchi/Dropbox/Work/Research/00_Active/SONCluster/Code/Examples/Alon"
+alon_path = "/Users/ericchi/Dropbox/Work/Research/01_Submitted/SONCluster/Code/Examples/Alon"
 
 X = as.matrix(log10(read.table(paste(alon_path,"alon.txt",sep="/"))))
 
