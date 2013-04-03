@@ -9,5 +9,4 @@ Remarks
 The Fortran code currently employs Intel's MKL for some matrix linear algebra. This is not essential for correctness.
 Alternatives will be provided in the future.
 
-This is accompanying code for a manuscript entitled 'Splitting Methods for Convex Clustering,' which is available on 
-arXiv (http://arxiv.org/abs/1304.0499).
+This is accompanying code for a manuscript entitled 'Splitting Methods for Convex Clustering' (http://arxiv.org/abs/1304.0499).
