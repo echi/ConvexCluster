@@ -1,15 +1,6 @@
 ## This script tests the convex_clustering algorithms in the admm.f90 module
 ## on halfmoons data
 
-# rm(list=ls())
-# setwd("/Users/ericchi/Dropbox/Work/Research/00_Active/SONCluster/Code/ADMM")
-# library(ggplot2)
-# source('admm.R')
-# source('admm_convex_cluster.R')
-# source('cluster_path_preprocess.R')
-# library(clusterpath)
-# source('../ex_two_moons.R')
-
 #######################################
 ## Part B: Time trials               ##
 #######################################
