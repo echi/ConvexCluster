@@ -15,7 +15,7 @@ library(clusterpath)
 #######################################
 
 source('../Examples/ex_two_moons.R')
-source('R/Examples//ex-admm_halfmoons_timing.R')
+source('R/Examples/ex-admm_halfmoons_timing.R')
 
 #######################################
 ## Example 2: Iris                   ##
