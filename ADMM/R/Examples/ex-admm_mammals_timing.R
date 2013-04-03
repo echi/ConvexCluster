@@ -1,14 +1,6 @@
 ## This script tests the convex_clustering algorithms in the admm.f90 module
 ## on mammals data
 
-rm(list=ls())
-setwd("/Users/ericchi/Dropbox/Work/Research/00_Active/SONCluster/Code/ADMM")
-library(ggplot2)
-source('admm.R')
-source('admm_convex_cluster.R')
-source('cluster_path_preprocess.R')
-library(clusterpath)
-
 #######################################
 ## Part B: Timing comparisons        ##
 #######################################
@@ -70,9 +62,9 @@ for (i in 1:nRuns) {
 ## Loss function (Primal)             #
 #######################################
 if (is.loaded('loss_primal')) {
-  dyn.unload('../AMA/ama.so')
+  dyn.unload('../AMA/Fortran/ama.so')
 }
-dyn.load('../AMA/ama.so')
+dyn.load('../AMA/Fortran/ama.so')
 loss_primalF = function(X,U,gamma,w,ix,type) {
   dimU = dim(U)
   p = as.integer(dimU[2])

@@ -1,5 +1,5 @@
 ## These functions perform various variable updates for ADMM
-source('prox.R')
+source('R/Functions/prox.R')
 library(compiler)
 #######################################
 ## R versions                         #
@@ -93,9 +93,9 @@ rm(temp)
 ## R wrappers around Fortran versions #
 #######################################
 if (is.loaded('update_u')) {
-  dyn.unload('admm.so')
+  dyn.unload('Fortran/admm.so')
 }
-dyn.load('admm.so')
+dyn.load('Fortran/admm.so')
 
 update_UF = function(X,V,Lambda,M1,M2,s1,s2,nu) {
   p = as.integer(ncol(X))

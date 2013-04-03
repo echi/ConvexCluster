@@ -5,12 +5,12 @@ library(igraph)
 #######################################
 ## R wrappers around Fortran versions #
 #######################################
-source('cluster_path_preprocess.R')
+source('R/Functions/cluster_path_preprocess.R')
 
 if (is.loaded('convex_cluster_admm')) {
-  dyn.unload('admm.so')
+  dyn.unload('Fortran/admm.so')
 }
-dyn.load('admm.so')
+dyn.load('Fortran/admm.so')
 
 convex_cluster_admm = function(X,Lambda,V,ix,M1,M2,s1,s2,w,gamma,nu=1,type=2,max_iter=1e2,tol=1e-4) {
   q = as.integer(nrow(X))

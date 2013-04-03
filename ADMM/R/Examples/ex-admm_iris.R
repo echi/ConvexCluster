@@ -1,14 +1,6 @@
 ## This script tests the convex_clustering algorithms in the admm.f90 module
 ## on iris data
 
-rm(list=ls())
-setwd("/Users/ericchi/Dropbox/Work/Research/00_Active/SONCluster/Code/ADMM")
-library(ggplot2)
-source('admm.R')
-source('admm_convex_cluster.R')
-source('cluster_path_preprocess.R')
-library(clusterpath)
-
 #######################################
 ## Part A: Create plots              ##
 #######################################
@@ -55,7 +47,7 @@ gamma_seq = gamma_seq[1:(i-1)]
 #****************************#
 #* Run ADMM on Set A        *#
 #****************************#
-system.time({ccp = convex_cluster_path_acc(X,w,gamma_seq,nu=nu,tol=tol,type=type)})
+system.time({ccp = convex_cluster_path_admm_acc(X,w,gamma_seq,nu=nu,tol=tol,type=type)})
 nGamma = ccp$nGamma
 ix = vec2tri(k=1:(p*(p-1)/2),p)
 Uout = consolidate_U(ccp$UHx,ccp$VHx,ix,nGamma)
@@ -99,7 +91,7 @@ gamma_seq = gamma_seq[1:(i-1)]
 #****************************#
 #* Run ADMM on Set B        *#
 #****************************#
-system.time({ccp = convex_cluster_path_acc(X,w,gamma_seq,nu=nu,tol=tol,type=type)})
+system.time({ccp = convex_cluster_path_admm_acc(X,w,gamma_seq,nu=nu,tol=tol,type=type)})
 nGamma = ccp$nGamma
 ix = vec2tri(k=1:(p*(p-1)/2),p)
 Uout = consolidate_U(ccp$UHx,ccp$VHx,ix,nGamma)
