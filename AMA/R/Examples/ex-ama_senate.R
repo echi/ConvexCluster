@@ -1,15 +1,15 @@
 ## This script tests the convex_clustering algorithms in the ama.f90 module
 ## on senate data
 
-rm(list=ls())
-setwd("/Users/ericchi/Dropbox/Work/Research/01_Submitted/SONCluster/Code/AMA")
-library(testthat)
-library(ggplot2)
-source('ama_loss.R')
-source('ama_updates.R')
-source('ama_convex_cluster.R')
-source('cluster_path_preprocess.R')
-library(clusterpath)
+# rm(list=ls())
+# setwd("/Users/ericchi/Dropbox/Work/Research/01_Submitted/SONCluster/Code/AMA")
+# library(testthat)
+# library(ggplot2)
+# source('ama_loss.R')
+# source('ama_updates.R')
+# source('ama_convex_cluster.R')
+# source('cluster_path_preprocess.R')
+# library(clusterpath)
 
 #######################################
 ## Part A: Create plots              ##
@@ -84,7 +84,7 @@ if (scenario==1) {
 
 
 ix = compactify_edges(w,p)$ix
-nGamma = ccp$nGamma
+nGamma = length(gamma_seq)
 x = double(nGamma)
 y = double(nGamma)
 Z = X

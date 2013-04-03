@@ -1,5 +1,5 @@
 ## These functions perform various variable updates for AMA
-source('prox.R')
+source('R/Functions/prox.R')
 library(compiler)
 #######################################
 ## R versions                         #
@@ -53,9 +53,9 @@ rm(temp)
 ## R wrappers around Fortran versions #
 #######################################
 if (is.loaded('update_u')) {
-  dyn.unload('ama.so')
+  dyn.unload('Fortran/ama.so')
 }
-dyn.load('ama.so')
+dyn.load('Fortran/ama.so')
 
 update_UF = function(X,Lambda,M1,M2,s1,s2) {
   p = as.integer(ncol(X))

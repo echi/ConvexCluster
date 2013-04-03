@@ -38,9 +38,9 @@ rm(temp)
 ## R wrappers around Fortran versions #
 #######################################
 if (is.loaded('loss_primal')) {
-  dyn.unload('ama.so')
+  dyn.unload('Fortran/ama.so')
 }
-dyn.load('ama.so')
+dyn.load('Fortran/ama.so')
 
 loss_primalF = function(X,U,gamma,w,ix,type) {
   dimU = dim(U)

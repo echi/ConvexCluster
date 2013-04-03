@@ -5,12 +5,12 @@ library(igraph)
 #######################################
 ## R wrappers around Fortran versions #
 #######################################
-source('cluster_path_preprocess.R')
+source('R/Functions/cluster_path_preprocess.R')
 
 if (is.loaded('convex_cluster')) {
-  dyn.unload('ama.so')
+  dyn.unload('Fortran/ama.so')
 }
-dyn.load('ama.so')
+dyn.load('Fortran/ama.so')
 
 convex_cluster = function(X,Lambda,ix,M1,M2,s1,s2,w,gamma,nu,eta=2,type=2,max_iter=1e2,tol=1e-4) {
   q = as.integer(nrow(X))
