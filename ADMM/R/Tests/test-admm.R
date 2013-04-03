@@ -1,15 +1,5 @@
 ## This script tests the updates and residual calculations in the admm.f90 module
 
-rm(list=ls())
-library(testthat)
-source('admm.R')
-source('cluster_path_preprocess.R')
-
-if (is.loaded('test_prox')) {
-  dyn.unload('test-prox.so')
-}
-dyn.load('test-prox.so')
-
 context("Parameter Updates")
 
 test_that("Proximal Mappings are correct", {
@@ -20,11 +10,11 @@ test_that("Proximal Mappings are correct", {
     x = rnorm(n)
     tau = rgamma(1,shape=1)
     type = 1
-    expect_that(prox_F(x,tau,type+3),equals(prox_R(x,tau,type)))
+    expect_that(prox_F(x,tau,type),equals(prox_R(x,tau,type)))
     type = 2
-    expect_that(prox_F(x,tau,type+3),equals(prox_R(x,tau,type)))
+    expect_that(prox_F(x,tau,type),equals(prox_R(x,tau,type)))
     type = 3
-    expect_that(prox_F(x,tau,type+3),equals(prox_R(x,tau,type)))
+    expect_that(prox_F(x,tau,type),equals(prox_R(x,tau,type)))
   }
 })
 
@@ -114,11 +104,11 @@ test_that("update_V is working", {
     Lambda = matrix(rnorm(q*nK),q,nK)
     ix = edge_info$ix
     type = 1
-    expect_that(update_VF(U,Lambda,w,gamma,nu,ix,type+3), equals(update_VR(U,Lambda,w,gamma,nu,ix,type)))
+    expect_that(update_VF(U,Lambda,w,gamma,nu,ix,type), equals(update_VR(U,Lambda,w,gamma,nu,ix,type)))
     type = 2
-    expect_that(update_VF(U,Lambda,w,gamma,nu,ix,type+3), equals(update_VR(U,Lambda,w,gamma,nu,ix,type)))
+    expect_that(update_VF(U,Lambda,w,gamma,nu,ix,type), equals(update_VR(U,Lambda,w,gamma,nu,ix,type)))
     type = 3
-    expect_that(update_VF(U,Lambda,w,gamma,nu,ix,type+3), equals(update_VR(U,Lambda,w,gamma,nu,ix,type)))    
+    expect_that(update_VF(U,Lambda,w,gamma,nu,ix,type), equals(update_VR(U,Lambda,w,gamma,nu,ix,type)))    
   }
 })
 
